@@ -55,3 +55,47 @@ def get_titanic_data(cached=False):
         df = pd.read_csv('titanic_df.csv', index_col=0)
         
     return df
+
+
+
+
+
+
+os.path.isfile('iris_df.csv')
+
+# Create helper function to get the necessary connection url.
+def get_connection(db, user=user, host=host, password=password):
+    '''
+    This function uses my info from my env file to
+    create a connection url to access the Codeup db.
+    '''
+    return f'mysql+pymysql://{user}:{password}@{host}/{db}'
+
+# Use the above helper function and a sql query in a single function.
+def new_iris_data():
+    '''
+    This function reads data from the Codeup db into a df.
+    '''
+    sql_query = 'select * from measurements join species using (species_id);'
+    return pd.read_sql(sql_query, get_connection('iris_db'))
+
+def get_iris_data(cached=False):
+    '''
+    This function reads in titanic data from Codeup database and writes data to
+    a csv file if cached == False or if cached == True reads in titanic df from
+    a csv file, returns df.
+    '''
+    if cached == False or os.path.isfile('iris_df.csv') == False:
+        
+        # Read fresh data from db into a DataFrame.
+        df = new_iris_data()
+        
+        # Write DataFrame to a csv file.
+        df.to_csv('iris_df.csv')
+        
+    else:
+        
+        # If csv file exists or cached == True, read in data from csv.
+        df = pd.read_csv('iris_df.csv', index_col=0)
+        
+    return df
