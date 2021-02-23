@@ -1,6 +1,9 @@
 import pandas as pd
 import numpy as np
 import os
+# acquire
+from env import host, user, password
+from pydataset import data
 
 # visualize
 import seaborn as sns
@@ -12,9 +15,7 @@ plt.rc('font', size=13)
 import warnings
 warnings.filterwarnings("ignore")
 
-# acquire
-from env import host, user, password
-from pydataset import data
+
 
 
 os.path.isfile('titanic_df.csv')
@@ -76,7 +77,11 @@ def new_iris_data():
     '''
     This function reads data from the Codeup db into a df.
     '''
-    sql_query = 'select * from measurements join species using (species_id);'
+    sql_query =    '''
+                   select * 
+                   from measurements 
+                   join species using (species_id);
+                   '''
     return pd.read_sql(sql_query, get_connection('iris_db'))
 
 def get_iris_data(cached=False):
